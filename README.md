@@ -1,3 +1,12 @@
+Requerimentos
+------------------
+
+Node.js 20+
+Docker
+
+
+Sistema de Venda de Ingressos
+------------------
 Este sistema é uma **API REST** desenvolvida para facilitar a criação, o gerenciamento e a venda de ingressos para eventos por meio de parceiros comerciais. Ele foi projetado para ser escalável e suportar um alto volume de acessos simultâneos.
 
 A arquitetura segue o padrão **MVC (Model-View-Controller)**, garantindo organização e separação de responsabilidades. Além disso, utiliza os seguintes **Design Patterns** para melhorar a estrutura e a reutilização do código:
