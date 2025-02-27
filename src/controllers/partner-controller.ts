@@ -5,6 +5,56 @@ import { EventService } from "../services/event-service";
 export const partnerRoutes = Router();
 
 // registro de parceiros
+/**
+ * @swagger
+ * /partners/register:
+ *   post:
+ *     summary: Registra um novo parceiro
+ *     description: Cria uma nova conta de parceiro com nome, e-mail, senha e nome da empresa.
+ *     tags:
+ *       - Parceiros
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - company_name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Empresa X"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "contato@empresa.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: "senhaSegura123"
+ *               company_name:
+ *                 type: string
+ *                 example: "Empresa X Ltda"
+ *     responses:
+ *       201:
+ *         description: Parceiro registrado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 result:
+ *                   type: string
+ *                   example: "Parceiro cadastrado com sucesso!"
+ *       400:
+ *         description: Requisição inválida (dados faltando ou inválidos)
+ *       500:
+ *         description: Erro interno no servidor
+ */
 partnerRoutes.post('/register', async (req, res) => {
     const { name, email, password, company_name } = req.body;
     const partnerSevice = new PartnerService();
@@ -13,6 +63,51 @@ partnerRoutes.post('/register', async (req, res) => {
 });
 
 // registro de eventos de parceiros
+/**
+ * @swagger
+ * /partners/events:
+ *   post:
+ *     summary: Registra um novo evento para parceiros
+ *     description: Permite que um parceiro autenticado crie um evento.
+ *     tags:
+ *       - Parceiros
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *               - date
+ *               - location
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Tech Conference 2025"
+ *               description:
+ *                 type: string
+ *                 example: "Uma conferência sobre inovação tecnológica."
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2025-05-20T14:00:00Z"
+ *               location:
+ *                 type: string
+ *                 example: "Centro de Convenções, São Paulo"
+ *     responses:
+ *       201:
+ *         description: Evento criado com sucesso
+ *       403:
+ *         description: Não autorizado (usuário não é um parceiro)
+ *       400:
+ *         description: Requisição inválida
+ *       500:
+ *         description: Erro interno no servidor
+ */
 partnerRoutes.post('/events', async (req, res) => {
     const { name, description, date, location } = req.body;
     const userId = req.user!.id;
@@ -32,6 +127,47 @@ partnerRoutes.post('/events', async (req, res) => {
 });
 
 // listar eventos de parceiros
+/**
+ * @swagger
+ * /partners/events:
+ *   get:
+ *     summary: Lista eventos de um parceiro autenticado
+ *     description: Retorna todos os eventos criados pelo parceiro autenticado.
+ *     tags:
+ *       - Parceiros
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de eventos do parceiro autenticado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: "Tech Conference 2025"
+ *                   description:
+ *                     type: string
+ *                     example: "Uma conferência sobre inovação tecnológica."
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2025-05-20T14:00:00Z"
+ *                   location:
+ *                     type: string
+ *                     example: "Centro de Convenções, São Paulo"
+ *       403:
+ *         description: Não autorizado (usuário não é um parceiro)
+ *       500:
+ *         description: Erro interno no servidor
+ */
 partnerRoutes.get('/events', async (req, res) => {
     // obtém o ID do usuário autenticado a partir do objeto da requisição (req.user é garantido como não nulo pela validação anterior)
     const userId = req.user!.id; 
@@ -52,6 +188,55 @@ partnerRoutes.get('/events', async (req, res) => {
 });
 
 // buscar evento por id de parceiros
+/**
+ * @swagger
+ * /partners/events/{eventId}:
+ *   get:
+ *     summary: Busca um evento específico de um parceiro autenticado
+ *     description: Retorna os detalhes de um evento criado pelo parceiro autenticado.
+ *     tags:
+ *       - Parceiros
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         required: true
+ *         description: ID do evento a ser buscado
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Detalhes do evento encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   example: "Tech Conference 2025"
+ *                 description:
+ *                   type: string
+ *                   example: "Uma conferência sobre inovação tecnológica."
+ *                 date:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-20T14:00:00Z"
+ *                 location:
+ *                   type: string
+ *                   example: "Centro de Convenções, São Paulo"
+ *       403:
+ *         description: Não autorizado (usuário não é um parceiro)
+ *       404:
+ *         description: Evento não encontrado
+ *       500:
+ *         description: Erro interno no servidor
+ */
 partnerRoutes.get('/events/:eventId', async (req, res) => {
     const { eventId } = req.params;
     const userId = req.user!.id;

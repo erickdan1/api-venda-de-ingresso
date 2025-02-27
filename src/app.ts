@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import { swaggerUi, swaggerSpec } from "../swaggerConfig";
 import { Database } from './database';
 import { authRoutes } from './controllers/auth-controller';
 import { partnerRoutes } from './controllers/partner-controller';
@@ -19,6 +20,7 @@ const unprotectedRoutes = [
     { method: "POST", path: "/customers/register" },
     { method: "POST", path: "/partners/register" },
     { method: "GET", path: "/events" },
+    { method: "GET", path: "/api-docs" },
 ];
 
 // middleware para verificar autenticação
@@ -65,6 +67,9 @@ app.use(async (req, res, next) => {
 app.get('/', (req, res) => {
     res.json({message: "Hello World!"});
 });
+
+// Rota para acessar a documentação
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/auth', authRoutes);
 app.use('/partners', partnerRoutes);
