@@ -34,7 +34,9 @@ export class PartnerService {
         } catch (e) {
             await connection.rollback();
             throw e;
-        }   
+        } finally {
+            await connection.release();
+        }
     }
 
     async findByUserId(userId: number) {

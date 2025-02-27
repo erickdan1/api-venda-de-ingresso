@@ -7,6 +7,7 @@ import { customerRoutes } from './controllers/customer-controller';
 import { eventRoutes } from './controllers/event-controller';
 import { UserService } from './services/user-service';
 import { ticketRoutes } from './controllers/ticket-controller';
+import { purchaseRoutes } from './controllers/purchase-controller';
 
 const app = express();
 
@@ -70,11 +71,15 @@ app.use('/partners', partnerRoutes);
 app.use('/customers', customerRoutes);
 app.use('/events', eventRoutes);
 app.use('/events', ticketRoutes);
+app.use('/purchases', purchaseRoutes);
 
 app.listen(3000, async () => {
     const connection = Database.getInstance();
     // limpar tabelas
     await connection.execute("SET FOREIGN_KEY_CHECKS = 0"); // desativa temporariamente a verificação de chaves estrangeiras
+    await connection.execute("TRUNCATE TABLE reservation_tickets");
+    await connection.execute("TRUNCATE TABLE purchase_tickets");
+    await connection.execute("TRUNCATE TABLE purchases");
     await connection.execute("TRUNCATE TABLE tickets");
     await connection.execute("TRUNCATE TABLE events");
     await connection.execute("TRUNCATE TABLE customers");

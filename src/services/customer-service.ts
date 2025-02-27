@@ -38,6 +38,12 @@ export class CustomerService {
         } catch (e) {
             await connection.rollback();
             throw e;
+        } finally {
+            await connection.release();
         }
+    }
+
+    async findByUserId(userId: number): Promise<CustomerModel | null> {
+        return CustomerModel.findByUserId(userId, { user: true });
     }
 }
