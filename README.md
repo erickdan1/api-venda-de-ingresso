@@ -12,6 +12,7 @@ A arquitetura segue o padrão **MVC (Model-View-Controller)**, garantindo organi
 - **Application Service:** Separa a lógica de negócios da camada de controle, garantindo um código mais modular e testável.
 - **Active Record:** Facilita o gerenciamento das entidades do banco de dados diretamente nos modelos.
 - **Singleton:** Garante que a conexão com o banco de dados seja única e reutilizável em toda a aplicação.
+- **Factory:** Facilita a criação de objetos complexos, promovendo flexibilidade na inicialização de entidades sem acoplar implementações específicas.
 
 ## Funcionalidades
 
